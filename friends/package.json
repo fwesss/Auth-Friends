@@ -1,0 +1,91 @@
+{
+  "name": "friends",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-scripts": "3.3.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
+    "check-types": "tsc",
+    "prettier": "prettier --ignore-path .gitignore \"**/*.+(js|json|ts|tsx)\"",
+    "format": "yarn run prettier --write && stylelint --fix --ignore-path .gitignore \"**/*.+(css|tsx)\"",
+    "check-format": "yarn run prettier --list-different",
+    "validate": "npm-run-all --parallel check-types check-format lint build"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn run check-types && lint-staged && yarn run build"
+    }
+  },
+  "lint-staged": {
+    "*.+(js|ts|tsx)": [
+      "eslint"
+    ],
+    "**/*.+(js|json|ts|tsx)": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "stylelint": {
+    "extends": [
+      "stylelint-prettier/recommended",
+      "stylelint-config-rational-order"
+    ],
+    "plugins": [
+      "stylelint-order"
+    ]
+  },
+  "devDependencies": {
+    "@testing-library/user-event": "^7.1.2",
+    "@types/jest": "^24.0.0",
+    "@types/node": "^12.0.0",
+    "@types/react": "^16.9.0",
+    "@types/react-dom": "^16.9.0",
+    "@typescript-eslint/eslint-plugin": "^2.10.0",
+    "@typescript-eslint/parser": "^2.10.0",
+    "eslint": "^6.7.2",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-config-prettier": "^6.7.0",
+    "eslint-plugin-cypress": "^2.7.0",
+    "eslint-plugin-jest": "^23.1.1",
+    "eslint-plugin-jest-formatting": "^1.2.0",
+    "eslint-plugin-json-format": "^2.0.1",
+    "eslint-plugin-optimize-regex": "^1.1.7",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-testing-library": "^1.3.2",
+    "husky": "^3.1.0",
+    "lint-staged": "^9.5.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^1.19.1",
+    "stylelint": "^12.0.0",
+    "stylelint-config-prettier": "^8.0.0",
+    "stylelint-config-rational-order": "^0.1.2",
+    "stylelint-order": "^3.1.1",
+    "stylelint-prettier": "^1.1.1",
+    "typescript": "~3.7.2"
+  }
+}
