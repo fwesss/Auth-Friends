@@ -19,6 +19,7 @@
     "cypress"
   ],
   "extends": [
+    "react-app",
     "eslint:recommended",
     "eslint-config-prettier",
     "plugin:import/errors",
