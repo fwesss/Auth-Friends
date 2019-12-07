@@ -1,44 +1,45 @@
-import React, { FC } from 'react';
-import {
-  Button,
-  Input,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
-  FormControl,
-  FormLabel,
-} from '@chakra-ui/core';
+import React, { ChangeEvent, useState, FC } from 'react';
+import { FormControl, FormLabel, Input } from '@chakra-ui/core';
 
-const LoginForm: FC<{ isOpen: boolean; onClose: () => void }> = ({
-  isOpen,
-  onClose,
-}) => (
-  <Modal onClose={onClose} isOpen={isOpen} isCentered>
-    <ModalOverlay />
-    <ModalContent>
-      <ModalHeader>Login</ModalHeader>
-      <ModalCloseButton />
-      <ModalBody>
-        <FormControl as="form">
-          <FormLabel htmlFor="username">Username</FormLabel>
-          <Input id="username" type="text" autoComplete="on" />
+const LoginForm: FC = () => {
+  const [values, setValue] = useState({
+    username: '',
+    password: '',
+  });
 
-          <FormLabel htmlFor="password">Password</FormLabel>
-          <Input id="password" type="password" autoComplete="on" />
-        </FormControl>
-      </ModalBody>
-      <ModalFooter>
-        <Button variantColor="blue" mr={3}>
-          Submit
-        </Button>
-        <Button onClick={onClose}>Cancel</Button>
-      </ModalFooter>
-    </ModalContent>
-  </Modal>
-);
+  const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
+    setValue({
+      ...values,
+      [event.target.name]: event.target.value,
+    });
+  };
 
+  return (
+    <form>
+      <FormControl>
+        <FormLabel htmlFor="username">Username</FormLabel>
+        <Input
+          id="username"
+          type="text"
+          name="username"
+          value={values.username}
+          onChange={handleChange}
+          autoComplete="on"
+        />
+      </FormControl>
+
+      <FormControl>
+        <FormLabel htmlFor="password">Password</FormLabel>
+        <Input
+          id="password"
+          type="password"
+          name="password"
+          value={values.password}
+          onChange={handleChange}
+          autoComplete="on"
+        />
+      </FormControl>
+    </form>
+  );
+};
 export default LoginForm;
