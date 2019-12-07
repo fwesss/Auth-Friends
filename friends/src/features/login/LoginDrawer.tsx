@@ -5,8 +5,6 @@ import {
   Drawer,
   DrawerContent,
   DrawerHeader,
-  DrawerBody,
-  DrawerFooter,
   DrawerOverlay,
 } from '@chakra-ui/core';
 import LoginForm from './LoginForm';
@@ -23,16 +21,7 @@ const LoginDrawer: FC = () => {
         <DrawerContent>
           <DrawerHeader borderBottomWidth="1px">Login</DrawerHeader>
 
-          <DrawerBody>
-            <LoginForm />
-          </DrawerBody>
-
-          <DrawerFooter>
-            <Button variantColor="blue" mr={3}>
-              Submit
-            </Button>
-            <Button onClick={onClose}>Cancel</Button>
-          </DrawerFooter>
+          <LoginForm onClose={onClose} />
         </DrawerContent>
       </Drawer>
     </>
