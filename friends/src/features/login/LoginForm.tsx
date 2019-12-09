@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState, FC, FormEvent } from 'react';
+import React, { ChangeEvent, useState, FC, FormEvent, useEffect } from 'react';
 import axios from 'axios';
 import {
   FormControl,
@@ -7,6 +7,7 @@ import {
   DrawerBody,
   DrawerFooter,
   Button,
+  FormErrorMessage,
 } from '@chakra-ui/core';
 import { useHistory } from 'react-router-dom';
 
@@ -16,36 +17,71 @@ type LoginFormProps = {
 
 const LoginForm: FC<LoginFormProps> = ({ onClose }) => {
   const history = useHistory();
+  const [submitting, setSubmitting] = useState(false);
   const [values, setValue] = useState({
     username: '',
     password: '',
   });
 
+  const [usernameInvalid, setUsernameInvalid] = useState(false);
+  const [passwordInvalid, setPasswordInvalid] = useState(false);
+  const [validated, setValidated] = useState(false);
+
   const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
+    setUsernameInvalid(false);
+    setPasswordInvalid(false);
+    setValidated(false);
+
     setValue({
       ...values,
       [event.target.name]: event.target.value,
     });
   };
 
+  const validate = (): void => {
+    if (values.username !== 'Lambda School') {
+      setUsernameInvalid(true);
+    }
+
+    if (values.password !== 'i<3Lambd4') {
+      setPasswordInvalid(true);
+    }
+
+    setValidated(true);
+  };
+
   const login = (event: FormEvent): void => {
     event.preventDefault();
-    axios
-      .post('http://localhost:5000/api/login', {
-        username: values.username,
-        password: values.password,
-      })
-      .then((response) => {
-        localStorage.setItem('token', response.data.payload);
-        history.push('/FriendsList');
-      })
-      .catch((error) => error);
+    validate();
   };
+
+  useEffect(() => {
+    if (!usernameInvalid && !passwordInvalid && validated) {
+      setSubmitting(true);
+    }
+  }, [passwordInvalid, usernameInvalid, validated]);
+
+  useEffect(() => {
+    if (submitting) {
+      axios
+        .post('http://localhost:5000/api/login', {
+          username: values.username,
+          password: values.password,
+        })
+        .then((response) => {
+          localStorage.setItem('token', response.data.payload);
+          history.push('/FriendsList');
+        })
+        .catch((error) => error);
+    }
+
+    setSubmitting(false);
+  }, [history, submitting, values.password, values.username]);
 
   return (
     <form onSubmit={login}>
       <DrawerBody>
-        <FormControl>
+        <FormControl isRequired isInvalid={usernameInvalid}>
           <FormLabel htmlFor="username">Username</FormLabel>
           <Input
             id="username"
@@ -55,9 +91,10 @@ const LoginForm: FC<LoginFormProps> = ({ onClose }) => {
             onChange={handleChange}
             autoComplete="on"
           />
+          <FormErrorMessage>Incorrect username</FormErrorMessage>
         </FormControl>
 
-        <FormControl>
+        <FormControl isRequired isInvalid={passwordInvalid}>
           <FormLabel htmlFor="password">Password</FormLabel>
           <Input
             id="password"
@@ -67,11 +104,18 @@ const LoginForm: FC<LoginFormProps> = ({ onClose }) => {
             onChange={handleChange}
             autoComplete="on"
           />
+          <FormErrorMessage>Incorrect password</FormErrorMessage>
         </FormControl>
       </DrawerBody>
 
       <DrawerFooter>
-        <Button type="submit" variantColor="blue" mr={3}>
+        <Button
+          isLoading={submitting}
+          loadingText="Submitting"
+          type="submit"
+          variantColor="blue"
+          mr={3}
+        >
           Submit
         </Button>
         <Button onClick={onClose}>Cancel</Button>
