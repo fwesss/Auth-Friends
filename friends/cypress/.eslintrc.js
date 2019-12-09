@@ -5,4 +5,10 @@ module.exports = {
   env: {
     'cypress/globals': true,
   },
+  overrides: [
+    {
+      files: '**/*.+(ts|tsx)',
+      parser: '@typescript-eslint/parser',
+    },
+  ],
 };

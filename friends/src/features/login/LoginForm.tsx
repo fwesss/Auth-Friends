@@ -1,4 +1,11 @@
-import React, { ChangeEvent, useState, FC, FormEvent, useEffect } from 'react';
+import React, {
+  ChangeEvent,
+  useState,
+  FC,
+  FormEvent,
+  useEffect,
+  useContext,
+} from 'react';
 import axios from 'axios';
 import {
   FormControl,
@@ -10,6 +17,7 @@ import {
   FormErrorMessage,
 } from '@chakra-ui/core';
 import { useHistory } from 'react-router-dom';
+import AuthContext from '../../context/AuthContext';
 
 type LoginFormProps = {
   onClose: () => void;
@@ -17,6 +25,7 @@ type LoginFormProps = {
 
 const LoginForm: FC<LoginFormProps> = ({ onClose }) => {
   const history = useHistory();
+  const { setAuthenticated } = useContext(AuthContext);
   const [submitting, setSubmitting] = useState(false);
   const [values, setValue] = useState({
     username: '',
@@ -70,13 +79,24 @@ const LoginForm: FC<LoginFormProps> = ({ onClose }) => {
         })
         .then((response) => {
           localStorage.setItem('token', response.data.payload);
+          if (setAuthenticated) {
+            setAuthenticated(true);
+          }
           history.push('/FriendsList');
+          onClose();
         })
         .catch((error) => error);
     }
 
     setSubmitting(false);
-  }, [history, submitting, values.password, values.username]);
+  }, [
+    history,
+    onClose,
+    setAuthenticated,
+    submitting,
+    values.password,
+    values.username,
+  ]);
 
   return (
     <form onSubmit={login}>

@@ -23,3 +23,31 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+
+// Cypress.Commands.add('login', () => {
+//   const user = {
+//     username: 'Lambda School',
+//     password: 'i<3Lambd4',
+//   };
+//
+//   return cy
+//     .request({
+//       url: 'http://localhost:5000/api/login',
+//       method: 'POST',
+//       body: user,
+//     })
+//     .then((response) => {
+//       window.localStorage.setItem('token', response.body.payload);
+//       return { ...response.body.user, ...user };
+//     });
+// });
+
+Cypress.Commands.add('assertFriendsList', () => {
+  cy.url().should('eq', `${Cypress.config().baseUrl}/FriendsList`);
+});
+
+Cypress.Commands.add('assertLoggedIn', () => {
+  cy.window()
+    .its('localStorage.token')
+    .should('be.a', 'string');
+});
