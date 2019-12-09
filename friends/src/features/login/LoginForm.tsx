@@ -79,9 +79,7 @@ const LoginForm: FC<LoginFormProps> = ({ onClose }) => {
         })
         .then((response) => {
           localStorage.setItem('token', response.data.payload);
-          if (setAuthenticated) {
-            setAuthenticated(true);
-          }
+          setAuthenticated(true);
           history.push('/FriendsList');
           onClose();
         })

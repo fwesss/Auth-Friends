@@ -8,9 +8,7 @@ const Navbar: FC = () => {
 
   const logout = (): void => {
     localStorage.clear();
-    if (setAuthenticated) {
-      setAuthenticated(false);
-    }
+    setAuthenticated(false);
   };
 
   return (

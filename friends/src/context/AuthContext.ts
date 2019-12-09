@@ -5,8 +5,9 @@ type ContextProps = {
   setAuthenticated: Dispatch<SetStateAction<boolean>>;
 };
 
-const AuthContext = createContext<Partial<ContextProps>>({
+const AuthContext = createContext<ContextProps>({
   authenticated: false,
+  setAuthenticated: (value = false) => value,
 });
 
 export default AuthContext;
