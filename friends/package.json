@@ -17,17 +17,17 @@
     "prettier": "prettier \"**/*.+(js|json|ts|tsx)\"",
     "start": "react-scripts start",
     "test": "react-scripts test",
-    "test:ci": "react-scripts test --watchAll=false",
+    "test:ci": "react-scripts test --watchAll=false && yarn run test:e2e:run",
     "test:e2e": "is-ci \"test:e2e:run\" \"test:e2e:dev\"",
     "test:e2e:dev": "start-server-and-test start http://localhost:3000 cy:open",
     "pretest:e2e:run": "yarn run build",
     "test:e2e:run": "start-server-and-test build:serve http://localhost:3000 cy:run",
     "typedoc": "typedoc && git add docs",
-    "validate": "npm-run-all --parallel check-types check-format lint test:ci test:e2e:run"
+    "validate": "npm-run-all --parallel check-types check-format lint test:ci"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn run check-types && lint-staged && yarn run typedoc && yarn run test:ci && yarn run test:e2e:run"
+      "pre-commit": "yarn run check-types && lint-staged && yarn run typedoc && yarn run test:ci"
     }
   },
   "lint-staged": {
@@ -72,7 +72,6 @@
     "@testing-library/react": "^9.3.2",
     "axios": "^0.19.0",
     "emotion-theming": "^10.0.19",
-    "formik": "^2.0.6",
     "history": "^4.10.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
