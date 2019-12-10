@@ -12,7 +12,7 @@ const Navbar: FC = () => {
   };
 
   return (
-    <Flex w="100%" px={5} py={4}>
+    <Flex w="100%" px={5} py={4} justify="flex-end">
       {authenticated ? (
         <Button onClick={logout}>Logout</Button>
       ) : (

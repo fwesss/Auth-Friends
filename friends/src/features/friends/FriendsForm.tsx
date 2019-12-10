@@ -16,17 +16,13 @@ import {
   Button,
 } from '@chakra-ui/core';
 import axios from 'axios';
+import Friend from './types';
 
 type FriendsFormProps = {
   onClose: () => void;
   setRefreshFriends: Dispatch<SetStateAction<boolean>>;
   action: string;
-  friend: {
-    id: number;
-    name: string;
-    age: string;
-    email: string;
-  };
+  friend: Friend;
 };
 
 const FriendsForm: FC<FriendsFormProps> = ({

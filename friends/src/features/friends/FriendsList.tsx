@@ -7,6 +7,7 @@ import {
   Text,
   Button,
   ButtonGroup,
+  Grid,
 } from '@chakra-ui/core';
 import FriendsDrawer from './FriendsDrawer';
 
@@ -90,7 +91,7 @@ const FriendsList: FC = () => {
   }, [deleting, friendToDelete]);
 
   return (
-    <>
+    <Grid templateColumns="repeat(4, 1fr)" gap={6} m={10}>
       {isLoading ? (
         <Spinner size="xl" />
       ) : (
@@ -126,11 +127,12 @@ const FriendsList: FC = () => {
         action={action}
         setAction={setAction}
         friend={friendToEdit}
+        setFriend={setFriendToEdit}
         onOpen={onOpen}
         isOpen={isOpen}
         onClose={onClose}
       />
-    </>
+    </Grid>
   );
 };
 

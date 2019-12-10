@@ -1,12 +1,13 @@
-import React, { Dispatch, FC, SetStateAction } from 'react';
+import React, { Dispatch, FC, SetStateAction, useEffect } from 'react';
 import {
-  Button,
+  IconButton,
   Drawer,
   DrawerOverlay,
   DrawerContent,
   DrawerHeader,
 } from '@chakra-ui/core';
 import FriendsForm from './FriendsForm';
+import Friend from './types';
 
 type FriendsDrawerProps = {
   setRefreshFriends: Dispatch<SetStateAction<boolean>>;
@@ -18,6 +19,7 @@ type FriendsDrawerProps = {
     age: string;
     email: string;
   };
+  setFriend: Dispatch<SetStateAction<Friend>>;
   onOpen: () => void;
   isOpen: boolean;
   onClose: () => void;
@@ -28,6 +30,7 @@ const FriendsDrawer: FC<FriendsDrawerProps> = ({
   action,
   setAction,
   friend,
+  setFriend,
   onOpen,
   isOpen,
   onClose,
@@ -37,11 +40,31 @@ const FriendsDrawer: FC<FriendsDrawerProps> = ({
     setAction('SUBMIT');
   };
 
+  useEffect(() => {
+    if (action === 'SUBMIT') {
+      setFriend({
+        id: 0,
+        name: '',
+        age: '',
+        email: '',
+      });
+    }
+  }, [action, setFriend]);
+
   return (
     <>
-      <Button leftIcon="add" variantColor="teal" onClick={handleAdd}>
-        Add Friend
-      </Button>
+      <IconButton
+        aria-label="Add Friend"
+        icon="add"
+        variantColor="teal"
+        onClick={handleAdd}
+        pos="absolute"
+        zIndex={2}
+        bottom="2rem"
+        right="2rem"
+        size="lg"
+        isRound
+      />
 
       <Drawer placement="right" onClose={onClose} isOpen={isOpen}>
         <DrawerOverlay />
