@@ -60,11 +60,19 @@ const FriendsForm: FC<FriendsFormProps> = ({ onClose, setRefreshFriends }) => {
           setRefreshFriends(true);
           onClose();
         })
-        .catch((error) => error);
+        .catch((error) => error)
+        .finally(() => {
+          setSubmitting(false);
+        });
     }
-
-    setSubmitting(false);
-  }, [onClose, submitting, values.age, values.email, values.name]);
+  }, [
+    onClose,
+    setRefreshFriends,
+    submitting,
+    values.age,
+    values.email,
+    values.name,
+  ]);
 
   return (
     <form onSubmit={addFriend}>
