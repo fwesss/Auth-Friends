@@ -1,18 +1,33 @@
 import React, { FC, useEffect, useState } from 'react';
 import axios from 'axios';
-import { Spinner, Flex, Text, Button } from '@chakra-ui/core';
+import {
+  useDisclosure,
+  Spinner,
+  Flex,
+  Text,
+  Button,
+  ButtonGroup,
+} from '@chakra-ui/core';
 import FriendsDrawer from './FriendsDrawer';
 
 const FriendsList: FC = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [isLoading, setIsLoading] = useState(true);
   const [deleting, setDeleting] = useState(false);
-  const [idToDelete, setIdToDelete] = useState(0);
+  const [friendToDelete, setFriendToDelete] = useState(0);
+  const [friendToEdit, setFriendToEdit] = useState({
+    id: 0,
+    name: '',
+    age: '',
+    email: '',
+  });
+  const [action, setAction] = useState('');
   const [refreshFriends, setRefreshFriends] = useState(true);
   const [friends, setFriends] = useState([
     {
       id: 0,
       name: '',
-      age: 0,
+      age: '',
       email: '',
     },
   ]);
@@ -46,15 +61,21 @@ const FriendsList: FC = () => {
   }, [refreshFriends]);
 
   const deleteFriend = (id: number): void => {
-    setIdToDelete(id);
+    setFriendToDelete(id);
     setDeleting(true);
+  };
+
+  const editFriend = (id: number): void => {
+    setAction('EDIT');
+    setFriendToEdit(friends.filter((friend) => friend.id === id)[0]);
+    onOpen();
   };
 
   useEffect(() => {
     if (deleting) {
       axios({
         method: 'DELETE',
-        url: `http://localhost:5000/api/friends/${idToDelete}`,
+        url: `http://localhost:5000/api/friends/${friendToDelete}`,
         headers: {
           Authorization: localStorage.getItem('token'),
         },
@@ -66,7 +87,7 @@ const FriendsList: FC = () => {
           setRefreshFriends(true);
         });
     }
-  }, [deleting, idToDelete]);
+  }, [deleting, friendToDelete]);
 
   return (
     <>
@@ -78,20 +99,37 @@ const FriendsList: FC = () => {
             <Text fontWeight="bold">{friend.name}</Text>
             <Text>{`${friend.age} years old`}</Text>
             <Text>{friend.email}</Text>
-            <Button
-              isLoading={deleting}
-              loadingText="Deleting"
-              variantColor="red"
-              aria-label={`delete-${friend.email}`}
-              onClick={(): void => deleteFriend(friend.id)}
-            >
-              Delete
-            </Button>
+            <ButtonGroup spacing={4}>
+              <Button
+                aria-label={`edit-${friend.email}`}
+                onClick={(): void => editFriend(friend.id)}
+              >
+                Edit
+              </Button>
+
+              <Button
+                isLoading={deleting}
+                loadingText="Deleting"
+                variantColor="red"
+                aria-label={`delete-${friend.email}`}
+                onClick={(): void => deleteFriend(friend.id)}
+              >
+                Delete
+              </Button>
+            </ButtonGroup>
           </Flex>
         ))
       )}
 
-      <FriendsDrawer setRefreshFriends={setRefreshFriends} />
+      <FriendsDrawer
+        setRefreshFriends={setRefreshFriends}
+        action={action}
+        setAction={setAction}
+        friend={friendToEdit}
+        onOpen={onOpen}
+        isOpen={isOpen}
+        onClose={onClose}
+      />
     </>
   );
 };

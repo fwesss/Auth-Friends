@@ -6,9 +6,7 @@ describe('friends', () => {
     const friend = {
       name: firstName.toString(),
       age: faker.random.number(105).toString(),
-      email: faker.internet
-        .email(firstName, null, 'lambdaschool.com')
-        .toString(),
+      email: `${firstName}@ls.com`,
     };
 
     cy.visit('/')
@@ -23,8 +21,10 @@ describe('friends', () => {
       .findByText(/add friend/i)
       .click()
       .findByLabelText(/name/i)
+      .wait(500)
       .type(friend.name)
       .findByLabelText(/age/i)
+      .wait(500)
       .type(friend.age)
       .findByLabelText(/email/i)
       .wait(500)
@@ -35,6 +35,35 @@ describe('friends', () => {
       .findByLabelText(`delete-${friend.email}`)
       .click()
       .findByLabelText(friend.email)
-      .should('not.exist');
+      .should('not.exist')
+      .findByText(/add friend/i)
+      .click()
+      .findByLabelText(/name/i)
+      .wait(500)
+      .type(friend.name)
+      .findByLabelText(/age/i)
+      .wait(500)
+      .type(friend.age)
+      .findByLabelText(/email/i)
+      .wait(500)
+      .type(friend.email)
+      .findByText(/submit/i)
+      .click()
+      .findByLabelText(`edit-${friend.email}`)
+      .click()
+      .findByLabelText(/name/i)
+      .wait(500)
+      .type('*')
+      .findByLabelText(/age/i)
+      .wait(500)
+      .type('1')
+      .findByLabelText(/email/i)
+      .wait(500)
+      .type('p')
+      .findByText(/submit/i)
+      .click()
+      .findByText(`${friend.name}*`)
+      .findByText((str) => str.includes(`${friend.age + 1}`))
+      .findByText(`${friend.email}p`);
   });
 });

@@ -5,20 +5,41 @@ import {
   DrawerOverlay,
   DrawerContent,
   DrawerHeader,
-  useDisclosure,
 } from '@chakra-ui/core';
 import FriendsForm from './FriendsForm';
 
 type FriendsDrawerProps = {
   setRefreshFriends: Dispatch<SetStateAction<boolean>>;
+  action: string;
+  setAction: Dispatch<SetStateAction<string>>;
+  friend: {
+    id: number;
+    name: string;
+    age: string;
+    email: string;
+  };
+  onOpen: () => void;
+  isOpen: boolean;
+  onClose: () => void;
 };
 
-const FriendsDrawer: FC<FriendsDrawerProps> = ({ setRefreshFriends }) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+const FriendsDrawer: FC<FriendsDrawerProps> = ({
+  setRefreshFriends,
+  action,
+  setAction,
+  friend,
+  onOpen,
+  isOpen,
+  onClose,
+}) => {
+  const handleAdd = (): void => {
+    onOpen();
+    setAction('SUBMIT');
+  };
 
   return (
     <>
-      <Button leftIcon="add" variantColor="teal" onClick={onOpen}>
+      <Button leftIcon="add" variantColor="teal" onClick={handleAdd}>
         Add Friend
       </Button>
 
@@ -30,6 +51,8 @@ const FriendsDrawer: FC<FriendsDrawerProps> = ({ setRefreshFriends }) => {
           <FriendsForm
             onClose={onClose}
             setRefreshFriends={setRefreshFriends}
+            action={action}
+            friend={friend}
           />
         </DrawerContent>
       </Drawer>

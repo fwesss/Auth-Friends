@@ -20,13 +20,25 @@ import axios from 'axios';
 type FriendsFormProps = {
   onClose: () => void;
   setRefreshFriends: Dispatch<SetStateAction<boolean>>;
+  action: string;
+  friend: {
+    id: number;
+    name: string;
+    age: string;
+    email: string;
+  };
 };
 
-const FriendsForm: FC<FriendsFormProps> = ({ onClose, setRefreshFriends }) => {
+const FriendsForm: FC<FriendsFormProps> = ({
+  onClose,
+  setRefreshFriends,
+  action,
+  friend: { id, name = '', age = '', email = '' },
+}) => {
   const [values, setValue] = useState({
-    name: '',
-    age: '',
-    email: '',
+    name,
+    age,
+    email,
   });
   const [submitting, setSubmitting] = useState(false);
 
@@ -37,45 +49,63 @@ const FriendsForm: FC<FriendsFormProps> = ({ onClose, setRefreshFriends }) => {
     });
   };
 
-  const addFriend = (event: FormEvent): void => {
+  const handleSubmit = (event: FormEvent): void => {
     event.preventDefault();
     setSubmitting(true);
   };
 
   useEffect(() => {
     if (submitting) {
-      axios({
-        method: 'POST',
-        url: 'http://localhost:5000/api/friends',
-        headers: {
-          Authorization: localStorage.getItem('token'),
-        },
-        data: {
-          name: values.name,
-          age: values.age,
-          email: values.email,
-        },
-      })
-        .then(() => {
-          setRefreshFriends(true);
-          onClose();
+      if (action === 'EDIT') {
+        axios({
+          method: 'PUT',
+          url: `http://localhost:5000/api/friends/${id}`,
+          headers: {
+            Authorization: localStorage.getItem('token'),
+          },
+          data: values,
         })
-        .catch((error) => error)
-        .finally(() => {
-          setSubmitting(false);
-        });
+          .then(() => {
+            setRefreshFriends(true);
+            onClose();
+          })
+          .catch((error) => error)
+          .finally(() => {
+            setSubmitting(false);
+          });
+      } else if (action === 'SUBMIT') {
+        axios({
+          method: 'POST',
+          url: 'http://localhost:5000/api/friends',
+          headers: {
+            Authorization: localStorage.getItem('token'),
+          },
+          data: values,
+        })
+          .then(() => {
+            setRefreshFriends(true);
+            onClose();
+          })
+          .catch((error) => error)
+          .finally(() => {
+            setSubmitting(false);
+          });
+      }
     }
   }, [
+    action,
+    id,
     onClose,
     setRefreshFriends,
     submitting,
+    values,
     values.age,
     values.email,
     values.name,
   ]);
 
   return (
-    <form onSubmit={addFriend}>
+    <form onSubmit={handleSubmit}>
       <DrawerBody>
         <FormControl isRequired>
           <FormLabel htmlFor="name">Username</FormLabel>
