@@ -10,7 +10,6 @@ import FriendsForm from './FriendsForm';
 import Friend from './types';
 
 type FriendsDrawerProps = {
-  setRefreshFriends: Dispatch<SetStateAction<boolean>>;
   action: string;
   setAction: Dispatch<SetStateAction<string>>;
   friend: {
@@ -20,17 +19,18 @@ type FriendsDrawerProps = {
     email: string;
   };
   setFriend: Dispatch<SetStateAction<Friend>>;
+  setFriends: Dispatch<SetStateAction<Friend[]>>;
   onOpen: () => void;
   isOpen: boolean;
   onClose: () => void;
 };
 
 const FriendsDrawer: FC<FriendsDrawerProps> = ({
-  setRefreshFriends,
   action,
   setAction,
   friend,
   setFriend,
+  setFriends,
   onOpen,
   isOpen,
   onClose,
@@ -73,9 +73,9 @@ const FriendsDrawer: FC<FriendsDrawerProps> = ({
 
           <FriendsForm
             onClose={onClose}
-            setRefreshFriends={setRefreshFriends}
             action={action}
             friend={friend}
+            setFriends={setFriends}
           />
         </DrawerContent>
       </Drawer>

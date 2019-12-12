@@ -10,6 +10,7 @@ import {
   Grid,
 } from '@chakra-ui/core';
 import FriendsDrawer from './FriendsDrawer';
+import ensure from '../../utils/ensure';
 
 const FriendsList: FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -23,7 +24,6 @@ const FriendsList: FC = () => {
     email: '',
   });
   const [action, setAction] = useState('');
-  const [refreshFriends, setRefreshFriends] = useState(true);
   const [friends, setFriends] = useState([
     {
       id: 0,
@@ -34,32 +34,23 @@ const FriendsList: FC = () => {
   ]);
 
   useEffect(() => {
-    if (refreshFriends) {
-      setIsLoading(true);
-    }
-  }, [refreshFriends]);
-
-  useEffect(() => {
-    if (refreshFriends) {
-      setRefreshFriends(false);
-      axios({
-        method: 'GET',
-        url: 'http://localhost:5000/api/friends',
-        headers: {
-          Authorization: localStorage.getItem('token'),
-        },
+    axios({
+      method: 'GET',
+      url: 'http://localhost:5000/api/friends',
+      headers: {
+        Authorization: localStorage.getItem('token'),
+      },
+    })
+      .then((response) => {
+        setFriends(response.data);
       })
-        .then((response) => {
-          setFriends(response.data);
-        })
-        .catch((error) => {
-          return error;
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-    }
-  }, [refreshFriends]);
+      .catch((error) => {
+        return error;
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, []);
 
   const deleteFriend = (id: number): void => {
     setFriendToDelete(id);
@@ -68,7 +59,7 @@ const FriendsList: FC = () => {
 
   const editFriend = (id: number): void => {
     setAction('EDIT');
-    setFriendToEdit(friends.filter((friend) => friend.id === id)[0]);
+    setFriendToEdit(ensure(friends.find((friend) => friend.id === id)));
     onOpen();
   };
 
@@ -81,11 +72,10 @@ const FriendsList: FC = () => {
           Authorization: localStorage.getItem('token'),
         },
       })
-        .then((response) => response)
+        .then((response) => setFriends(response.data))
         .catch((error) => error)
         .finally(() => {
           setDeleting(false);
-          setRefreshFriends(true);
         });
     }
   }, [deleting, friendToDelete]);
@@ -123,7 +113,7 @@ const FriendsList: FC = () => {
       )}
 
       <FriendsDrawer
-        setRefreshFriends={setRefreshFriends}
+        setFriends={setFriends}
         action={action}
         setAction={setAction}
         friend={friendToEdit}

@@ -20,16 +20,16 @@ import Friend from './types';
 
 type FriendsFormProps = {
   onClose: () => void;
-  setRefreshFriends: Dispatch<SetStateAction<boolean>>;
   action: string;
   friend: Friend;
+  setFriends: Dispatch<SetStateAction<Friend[]>>;
 };
 
 const FriendsForm: FC<FriendsFormProps> = ({
   onClose,
-  setRefreshFriends,
   action,
   friend: { id, name = '', age = '', email = '' },
+  setFriends,
 }) => {
   const [values, setValue] = useState({
     name,
@@ -61,8 +61,8 @@ const FriendsForm: FC<FriendsFormProps> = ({
           },
           data: values,
         })
-          .then(() => {
-            setRefreshFriends(true);
+          .then((response) => {
+            setFriends(response.data);
             onClose();
           })
           .catch((error) => error)
@@ -78,8 +78,8 @@ const FriendsForm: FC<FriendsFormProps> = ({
           },
           data: values,
         })
-          .then(() => {
-            setRefreshFriends(true);
+          .then((response) => {
+            setFriends(response.data);
             onClose();
           })
           .catch((error) => error)
@@ -92,7 +92,7 @@ const FriendsForm: FC<FriendsFormProps> = ({
     action,
     id,
     onClose,
-    setRefreshFriends,
+    setFriends,
     submitting,
     values,
     values.age,
