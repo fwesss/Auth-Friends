@@ -4,17 +4,21 @@ import { render, fireEvent } from '@testing-library/react';
 import './setupTests';
 import { createMemoryHistory } from 'history';
 import { ThemeProvider } from '@chakra-ui/core';
-import LoginDrawer from '../features/login/LoginDrawer';
+import { Provider } from 'react-redux';
+import LoginDrawer from '../features/auth/LoginDrawer';
+import store from '../app/store';
 
 describe('login errors', () => {
   it('should require username and password fields to be filled out and notify user of incorrect login', () => {
     const history = createMemoryHistory();
     const { getByText, getByLabelText } = render(
-      <ThemeProvider>
-        <Router history={history}>
-          <LoginDrawer />
-        </Router>
-      </ThemeProvider>
+      <Provider store={store}>
+        <ThemeProvider>
+          <Router history={history}>
+            <LoginDrawer />
+          </Router>
+        </ThemeProvider>
+      </Provider>
     );
 
     // expand the login drawer

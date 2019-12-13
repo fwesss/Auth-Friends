@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>&quot;context/AuthContext&quot; | friends</title>
+	<title>&quot;api/friendsAPI&quot; | friends</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,10 +56,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="_context_authcontext_.html">&quot;context/AuthContext&quot;</a>
+					<a href="_api_friendsapi_.html">&quot;api/friendsAPI&quot;</a>
 				</li>
 			</ul>
-			<h1>External module &quot;context/AuthContext&quot;</h1>
+			<h1>External module &quot;api/friendsAPI&quot;</h1>
 		</div>
 	</div>
 </header>
@@ -70,56 +70,42 @@
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
-						<section class="tsd-index-section tsd-is-not-exported">
-							<h3>Type aliases</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-not-exported"><a href="_context_authcontext_.html#contextprops" class="tsd-kind-icon">Context<wbr>Props</a></li>
-							</ul>
-						</section>
 						<section class="tsd-index-section ">
-							<h3>Variables</h3>
+							<h3>Functions</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-variable tsd-parent-kind-external-module"><a href="_context_authcontext_.html#authcontext" class="tsd-kind-icon">Auth<wbr>Context</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_api_friendsapi_.html#requestauthentication" class="tsd-kind-icon">request<wbr>Authentication</a></li>
 							</ul>
 						</section>
-					</div>
-				</section>
-			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
-				<h2>Type aliases</h2>
-				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-not-exported">
-					<a name="contextprops" class="tsd-anchor"></a>
-					<h3>Context<wbr>Props</h3>
-					<div class="tsd-signature tsd-kind-icon">Context<wbr>Props<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/fwesss/Auth-Friends/blob/de4a3dc/friends/src/context/AuthContext.ts#L3">src/context/AuthContext.ts:3</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-type-declaration">
-						<h4>Type declaration</h4>
-						<ul class="tsd-parameters">
-							<li class="tsd-parameter">
-								<h5>authenticated<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></h5>
-							</li>
-							<li class="tsd-parameter">
-								<h5>set<wbr>Authenticated<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Dispatch</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">SetStateAction</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
-							</li>
-						</ul>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Variables</h2>
-				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module">
-					<a name="authcontext" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagConst">Const</span> Auth<wbr>Context</h3>
-					<div class="tsd-signature tsd-kind-icon">Auth<wbr>Context<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Context</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;createContext&lt;ContextProps&gt;({authenticated: false,setAuthenticated: (value &#x3D; false) &#x3D;&gt; value,})</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/fwesss/Auth-Friends/blob/de4a3dc/friends/src/context/AuthContext.ts#L8">src/context/AuthContext.ts:8</a></li>
-						</ul>
-					</aside>
+				<h2>Functions</h2>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module">
+					<a name="requestauthentication" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> request<wbr>Authentication</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
+						<li class="tsd-signature tsd-kind-icon">request<wbr>Authentication<span class="tsd-signature-symbol">(</span>username<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, password<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">AxiosPromise</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/fwesss/Auth-Friends/blob/769b784/friends/src/api/friendsAPI.ts#L3">src/api/friendsAPI.ts:3</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>username: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>password: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">AxiosPromise</span></h4>
+						</li>
+					</ul>
 				</section>
 			</section>
 		</div>
@@ -128,6 +114,9 @@
 				<ul>
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
+					</li>
+					<li class="current tsd-kind-external-module">
+						<a href="_api_friendsapi_.html">&quot;api/friendsAPI&quot;</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="_app_app_.html">&quot;app/<wbr>App&quot;</a>
@@ -139,10 +128,22 @@
 						<a href="_app_layout_navbar_.html">&quot;app/layout/<wbr>Navbar&quot;</a>
 					</li>
 					<li class=" tsd-kind-external-module">
+						<a href="_app_rootreducer_.html">&quot;app/root<wbr>Reducer&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_app_store_.html">&quot;app/store&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
 						<a href="_app_theme_.html">&quot;app/theme&quot;</a>
 					</li>
-					<li class="current tsd-kind-external-module">
-						<a href="_context_authcontext_.html">&quot;context/<wbr>Auth<wbr>Context&quot;</a>
+					<li class=" tsd-kind-external-module">
+						<a href="_features_auth_logindrawer_.html">&quot;features/auth/<wbr>Login<wbr>Drawer&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_features_auth_loginform_.html">&quot;features/auth/<wbr>Login<wbr>Form&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_features_auth_authslice_.html">&quot;features/auth/auth<wbr>Slice&quot;</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="_features_friends_friendsdrawer_.html">&quot;features/friends/<wbr>Friends<wbr>Drawer&quot;</a>
@@ -155,12 +156,6 @@
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="_features_friends_types_.html">&quot;features/friends/types&quot;</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="_features_login_logindrawer_.html">&quot;features/login/<wbr>Login<wbr>Drawer&quot;</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="_features_login_loginform_.html">&quot;features/login/<wbr>Login<wbr>Form&quot;</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="_hooks_uselocalstorage_.html">&quot;hooks/use<wbr>Local<wbr>Storage&quot;</a>
@@ -181,11 +176,8 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="_context_authcontext_.html#contextprops" class="tsd-kind-icon">Context<wbr>Props</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-external-module">
-						<a href="_context_authcontext_.html#authcontext" class="tsd-kind-icon">Auth<wbr>Context</a>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
+						<a href="_api_friendsapi_.html#requestauthentication" class="tsd-kind-icon">request<wbr>Authentication</a>
 					</li>
 				</ul>
 			</nav>

@@ -1,15 +1,26 @@
-import React, { FC, useContext } from 'react';
+import React, { FC, useEffect } from 'react';
 import { Flex, Button } from '@chakra-ui/core';
-import LoginDrawer from '../../features/login/LoginDrawer';
-import AuthContext from '../../context/AuthContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { unAuthenticateUser } from '../../features/auth/authSlice';
+import LoginDrawer from '../../features/auth/LoginDrawer';
+import { RootState } from '../rootReducer';
 
 const Navbar: FC = () => {
-  const { authenticated, setAuthenticated } = useContext(AuthContext);
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const { authenticated } = useSelector((state: RootState) => state.auth);
 
   const logout = (): void => {
     localStorage.clear();
-    setAuthenticated(false);
+    dispatch(unAuthenticateUser());
   };
+
+  useEffect(() => {
+    if (authenticated) {
+      history.push('/FriendsList');
+    }
+  }, [authenticated, history]);
 
   return (
     <Flex w="100%" px={5} py={4} justify="flex-end">

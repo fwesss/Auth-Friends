@@ -4,9 +4,8 @@ import React, {
   FC,
   FormEvent,
   useEffect,
-  useContext,
+  useReducer,
 } from 'react';
-import axios from 'axios';
 import {
   FormControl,
   FormLabel,
@@ -16,30 +15,36 @@ import {
   Button,
   FormErrorMessage,
 } from '@chakra-ui/core';
-import { useHistory } from 'react-router-dom';
-import AuthContext from '../../context/AuthContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../app/rootReducer';
+import { authenticate } from './authSlice';
 
 type LoginFormProps = {
   onClose: () => void;
 };
 
+const initialValidState = {
+  username: false,
+  password: false,
+  validated: false,
+};
+
 const LoginForm: FC<LoginFormProps> = ({ onClose }) => {
-  const history = useHistory();
-  const { setAuthenticated } = useContext(AuthContext);
-  const [submitting, setSubmitting] = useState(false);
+  const dispatch = useDispatch();
+  const { authenticating } = useSelector((state: RootState) => state.auth);
+
   const [values, setValue] = useState({
     username: '',
     password: '',
   });
 
-  const [usernameInvalid, setUsernameInvalid] = useState(false);
-  const [passwordInvalid, setPasswordInvalid] = useState(false);
-  const [validated, setValidated] = useState(false);
+  const [valid, setValid] = useReducer(
+    (state, newState) => ({ ...state, ...newState }),
+    initialValidState
+  );
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    setUsernameInvalid(false);
-    setPasswordInvalid(false);
-    setValidated(false);
+    setValid(initialValidState);
 
     setValue({
       ...values,
@@ -47,52 +52,32 @@ const LoginForm: FC<LoginFormProps> = ({ onClose }) => {
     });
   };
 
-  const validate = (): void => {
+  const validate = (): boolean => {
     if (values.username !== 'Lambda School') {
-      setUsernameInvalid(true);
+      setValid({ username: true });
     }
 
     if (values.password !== 'i<3Lambd4') {
-      setPasswordInvalid(true);
+      setValid({ password: true });
     }
 
-    setValidated(true);
+    return true;
   };
 
   const login = (event: FormEvent): void => {
     event.preventDefault();
-    validate();
+    setValid({ validated: validate() });
   };
 
   useEffect(() => {
-    if (!usernameInvalid && !passwordInvalid && validated) {
-      setSubmitting(true);
-    }
-  }, [passwordInvalid, usernameInvalid, validated]);
-
-  useEffect(() => {
-    if (submitting) {
-      axios
-        .post('http://localhost:5000/api/login', {
-          username: values.username,
-          password: values.password,
-        })
-        .then((response) => {
-          localStorage.setItem('token', response.data.payload);
-          onClose();
-          setSubmitting(false);
-          setAuthenticated(true);
-          history.push('/FriendsList');
-        })
-        .catch(() => {
-          setSubmitting(false);
-        });
+    if (!valid.username && !valid.password && valid.validated) {
+      dispatch(authenticate(values.username, values.password));
     }
   }, [
-    history,
-    onClose,
-    setAuthenticated,
-    submitting,
+    dispatch,
+    valid.password,
+    valid.username,
+    valid.validated,
     values.password,
     values.username,
   ]);
@@ -100,7 +85,7 @@ const LoginForm: FC<LoginFormProps> = ({ onClose }) => {
   return (
     <form onSubmit={login}>
       <DrawerBody>
-        <FormControl isRequired isInvalid={usernameInvalid}>
+        <FormControl isRequired isInvalid={valid.username}>
           <FormLabel htmlFor="username">Username</FormLabel>
           <Input
             id="username"
@@ -113,7 +98,7 @@ const LoginForm: FC<LoginFormProps> = ({ onClose }) => {
           <FormErrorMessage>Incorrect username</FormErrorMessage>
         </FormControl>
 
-        <FormControl isRequired isInvalid={passwordInvalid}>
+        <FormControl isRequired isInvalid={valid.password}>
           <FormLabel htmlFor="password">Password</FormLabel>
           <Input
             id="password"
@@ -129,7 +114,7 @@ const LoginForm: FC<LoginFormProps> = ({ onClose }) => {
 
       <DrawerFooter>
         <Button
-          isLoading={submitting}
+          isLoading={authenticating}
           loadingText="Submitting"
           type="submit"
           variantColor="blue"
