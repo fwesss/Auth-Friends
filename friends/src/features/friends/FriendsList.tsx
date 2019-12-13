@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useReducer, useState } from 'react';
 import axios from 'axios';
 import {
   useDisclosure,
@@ -15,14 +15,19 @@ import ensure from '../../utils/ensure';
 const FriendsList: FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isLoading, setIsLoading] = useState(true);
-  const [deleting, setDeleting] = useState(false);
-  const [friendToDelete, setFriendToDelete] = useState(0);
+
+  const [deleteItem, setDeleteItem] = useReducer(
+    (state, newState) => ({ ...state, ...newState }),
+    { itemToDelete: 0, deleting: false }
+  );
+
   const [friendToEdit, setFriendToEdit] = useState({
     id: 0,
     name: '',
     age: '',
     email: '',
   });
+
   const [action, setAction] = useState('');
   const [friends, setFriends] = useState([
     {
@@ -53,8 +58,10 @@ const FriendsList: FC = () => {
   }, []);
 
   const deleteFriend = (id: number): void => {
-    setFriendToDelete(id);
-    setDeleting(true);
+    setDeleteItem({
+      itemToDelete: id,
+      deleting: true,
+    });
   };
 
   const editFriend = (id: number): void => {
@@ -64,10 +71,10 @@ const FriendsList: FC = () => {
   };
 
   useEffect(() => {
-    if (deleting) {
+    if (deleteItem.deleting) {
       axios({
         method: 'DELETE',
-        url: `http://localhost:5000/api/friends/${friendToDelete}`,
+        url: `http://localhost:5000/api/friends/${deleteItem.itemToDelete}`,
         headers: {
           Authorization: localStorage.getItem('token'),
         },
@@ -75,10 +82,12 @@ const FriendsList: FC = () => {
         .then((response) => setFriends(response.data))
         .catch((error) => error)
         .finally(() => {
-          setDeleting(false);
+          setDeleteItem({
+            deleting: false,
+          });
         });
     }
-  }, [deleting, friendToDelete]);
+  }, [deleteItem.deleting, deleteItem.itemToDelete]);
 
   return (
     <Grid templateColumns="repeat(4, 1fr)" gap={6} m={10}>
@@ -99,7 +108,7 @@ const FriendsList: FC = () => {
               </Button>
 
               <Button
-                isLoading={deleting}
+                isLoading={deleteItem.deleting}
                 loadingText="Deleting"
                 variantColor="red"
                 aria-label={`delete-${friend.email}`}
