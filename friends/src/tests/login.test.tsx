@@ -5,8 +5,8 @@ import './setupTests';
 import { createMemoryHistory } from 'history';
 import { ThemeProvider } from '@chakra-ui/core';
 import { Provider } from 'react-redux';
-import LoginDrawer from '../features/auth/LoginDrawer';
 import store from '../app/store';
+import Navbar from '../app/layout/Navbar';
 
 describe('login errors', () => {
   it('should require username and password fields to be filled out and notify user of incorrect login', () => {
@@ -15,7 +15,7 @@ describe('login errors', () => {
       <Provider store={store}>
         <ThemeProvider>
           <Router history={history}>
-            <LoginDrawer />
+            <Navbar />
           </Router>
         </ThemeProvider>
       </Provider>

@@ -1,48 +1,33 @@
 import React, { FC } from 'react';
 import {
-  IconButton,
   Drawer,
   DrawerOverlay,
   DrawerContent,
   DrawerHeader,
 } from '@chakra-ui/core';
+import { useSelector } from 'react-redux';
 import FriendsForm from './FriendsForm';
+import { RootState } from '../../app/rootReducer';
 
 type FriendsDrawerProps = {
-  onOpen: () => void;
   isOpen: boolean;
   onClose: () => void;
 };
 
-const FriendsDrawer: FC<FriendsDrawerProps> = ({ onOpen, isOpen, onClose }) => {
-  const handleAdd = (): void => {
-    onOpen();
-  };
+const FriendsDrawer: FC<FriendsDrawerProps> = ({ isOpen, onClose }) => {
+  const { editing } = useSelector((state: RootState) => state.editFriend);
 
   return (
-    <>
-      <IconButton
-        aria-label="Add Friend"
-        icon="add"
-        variantColor="teal"
-        onClick={handleAdd}
-        pos="absolute"
-        zIndex={2}
-        bottom="2rem"
-        right="2rem"
-        size="lg"
-        isRound
-      />
+    <Drawer placement="right" onClose={onClose} isOpen={isOpen}>
+      <DrawerOverlay />
+      <DrawerContent>
+        <DrawerHeader borderBottomWidth="1px">
+          {editing ? 'Edit Friend' : 'Add Friend'}
+        </DrawerHeader>
 
-      <Drawer placement="right" onClose={onClose} isOpen={isOpen}>
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerHeader borderBottomWidth="1px">Add Friend</DrawerHeader>
-
-          <FriendsForm onClose={onClose} />
-        </DrawerContent>
-      </Drawer>
-    </>
+        <FriendsForm onClose={onClose} />
+      </DrawerContent>
+    </Drawer>
   );
 };
 

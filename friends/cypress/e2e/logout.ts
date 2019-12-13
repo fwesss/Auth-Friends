@@ -11,6 +11,7 @@ describe('logout', () => {
       .click()
       .findByText(/logout/i)
       .click()
+      .assertHome()
       .findByText(/login/i);
   });
 });

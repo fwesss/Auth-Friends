@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Switch } from 'react-router-dom';
 import { ThemeProvider, CSSReset } from '@chakra-ui/core';
 import theme from './theme';
 import PrivateRoute from './components/PrivateRoute';
-import FriendsList from '../features/friends/FriendsList';
+import GetFriends from '../features/friends/getFriends/GetFriends';
 import Navbar from './layout/Navbar';
 
 const App: FC = () => (
@@ -12,7 +12,7 @@ const App: FC = () => (
     <Router>
       <Navbar />
       <Switch>
-        <PrivateRoute exact path="/FriendsList" component={FriendsList} />
+        <PrivateRoute exact path="/FriendsList" component={GetFriends} />
       </Switch>
     </Router>
   </ThemeProvider>

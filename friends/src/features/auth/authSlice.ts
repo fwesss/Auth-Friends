@@ -1,5 +1,5 @@
 import { Action, createSlice } from '@reduxjs/toolkit';
-import { ThunkAction } from 'redux-thunk';
+import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { requestAuthentication } from '../../api/friendsAPI';
 // eslint-disable-next-line import/no-cycle
 import { RootState } from '../../app/rootReducer';
@@ -74,4 +74,14 @@ export const authenticate = (
   } catch (error) {
     dispatch(authenticateUserError(JSON.stringify(error)));
   }
+};
+
+export const unAuthenticate = (): ThunkAction<
+  void,
+  RootState,
+  null,
+  Action<string>
+> => (dispatch: ThunkDispatch<RootState, null, Action<string>>): void => {
+  localStorage.clear();
+  dispatch(unAuthenticateUser());
 };

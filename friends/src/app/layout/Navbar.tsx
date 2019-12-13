@@ -1,20 +1,14 @@
 import React, { FC, useEffect } from 'react';
-import { Flex, Button } from '@chakra-ui/core';
-import { useDispatch, useSelector } from 'react-redux';
+import { Flex } from '@chakra-ui/core';
+import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { unAuthenticateUser } from '../../features/auth/authSlice';
-import LoginDrawer from '../../features/auth/LoginDrawer';
+import Logout from '../../features/auth/Logout';
 import { RootState } from '../rootReducer';
+import Login from '../../features/auth/Login';
 
 const Navbar: FC = () => {
   const history = useHistory();
-  const dispatch = useDispatch();
   const { authenticated } = useSelector((state: RootState) => state.auth);
-
-  const logout = (): void => {
-    localStorage.clear();
-    dispatch(unAuthenticateUser());
-  };
 
   useEffect(() => {
     if (authenticated) {
@@ -24,11 +18,7 @@ const Navbar: FC = () => {
 
   return (
     <Flex w="100%" px={5} py={4} justify="flex-end">
-      {authenticated ? (
-        <Button onClick={logout}>Logout</Button>
-      ) : (
-        <LoginDrawer />
-      )}
+      {authenticated ? <Logout /> : <Login />}
     </Flex>
   );
 };
