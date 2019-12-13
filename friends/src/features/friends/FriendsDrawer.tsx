@@ -1,4 +1,4 @@
-import React, { Dispatch, FC, SetStateAction, useEffect } from 'react';
+import React, { FC } from 'react';
 import {
   IconButton,
   Drawer,
@@ -7,49 +7,17 @@ import {
   DrawerHeader,
 } from '@chakra-ui/core';
 import FriendsForm from './FriendsForm';
-import Friend from './types';
 
 type FriendsDrawerProps = {
-  action: string;
-  setAction: Dispatch<SetStateAction<string>>;
-  friend: {
-    id: number;
-    name: string;
-    age: string;
-    email: string;
-  };
-  setFriend: Dispatch<SetStateAction<Friend>>;
-  setFriends: Dispatch<SetStateAction<Friend[]>>;
   onOpen: () => void;
   isOpen: boolean;
   onClose: () => void;
 };
 
-const FriendsDrawer: FC<FriendsDrawerProps> = ({
-  action,
-  setAction,
-  friend,
-  setFriend,
-  setFriends,
-  onOpen,
-  isOpen,
-  onClose,
-}) => {
+const FriendsDrawer: FC<FriendsDrawerProps> = ({ onOpen, isOpen, onClose }) => {
   const handleAdd = (): void => {
     onOpen();
-    setAction('SUBMIT');
   };
-
-  useEffect(() => {
-    if (action === 'SUBMIT') {
-      setFriend({
-        id: 0,
-        name: '',
-        age: '',
-        email: '',
-      });
-    }
-  }, [action, setFriend]);
 
   return (
     <>
@@ -71,12 +39,7 @@ const FriendsDrawer: FC<FriendsDrawerProps> = ({
         <DrawerContent>
           <DrawerHeader borderBottomWidth="1px">Add Friend</DrawerHeader>
 
-          <FriendsForm
-            onClose={onClose}
-            action={action}
-            friend={friend}
-            setFriends={setFriends}
-          />
+          <FriendsForm onClose={onClose} />
         </DrawerContent>
       </Drawer>
     </>

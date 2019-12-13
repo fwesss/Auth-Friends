@@ -1,5 +1,5 @@
 type Friend = {
-  id: number;
+  id?: number;
   name: string;
   age: string;
   email: string;

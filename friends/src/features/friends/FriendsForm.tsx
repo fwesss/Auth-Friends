@@ -1,104 +1,59 @@
-import React, {
-  ChangeEvent,
-  Dispatch,
-  FC,
-  FormEvent,
-  SetStateAction,
-  useEffect,
-  useState,
-} from 'react';
+import React, { ChangeEvent, FC, FormEvent, useEffect, useState } from 'react';
 import {
+  Button,
   DrawerBody,
+  DrawerFooter,
   FormControl,
   FormLabel,
   Input,
-  DrawerFooter,
-  Button,
 } from '@chakra-ui/core';
-import axios from 'axios';
-import Friend from './types';
+import { useDispatch, useSelector } from 'react-redux';
+import { postFriend } from './addFriend/addFriendSlice';
+import { RootState } from '../../app/rootReducer';
+import { putFriend } from './editFriend/editFriendSlice';
 
 type FriendsFormProps = {
   onClose: () => void;
-  action: string;
-  friend: Friend;
-  setFriends: Dispatch<SetStateAction<Friend[]>>;
 };
 
-const FriendsForm: FC<FriendsFormProps> = ({
-  onClose,
-  action,
-  friend: { id, name = '', age = '', email = '' },
-  setFriends,
-}) => {
-  const [values, setValue] = useState({
-    name,
-    age,
-    email,
+const FriendsForm: FC<FriendsFormProps> = ({ onClose }) => {
+  const dispatch = useDispatch();
+  const { posting } = useSelector((state: RootState) => state.addFriend);
+  const { editing, putting, friendToEdit } = useSelector(
+    (state: RootState) => state.editFriend
+  );
+  const [friend, setFriend] = useState({
+    id: 0,
+    name: '',
+    age: '',
+    email: '',
   });
-  const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (editing) {
+      setFriend(friendToEdit);
+    }
+  }, [editing, friendToEdit]);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    setValue({
-      ...values,
+    setFriend({
+      ...friend,
       [event.target.name]: event.target.value,
     });
   };
 
   const handleSubmit = (event: FormEvent): void => {
     event.preventDefault();
-    setSubmitting(true);
-  };
 
-  useEffect(() => {
-    if (submitting) {
-      if (action === 'EDIT') {
-        axios({
-          method: 'PUT',
-          url: `http://localhost:5000/api/friends/${id}`,
-          headers: {
-            Authorization: localStorage.getItem('token'),
-          },
-          data: values,
-        })
-          .then((response) => {
-            setFriends(response.data);
-            onClose();
-          })
-          .catch((error) => error)
-          .finally(() => {
-            setSubmitting(false);
-          });
-      } else if (action === 'SUBMIT') {
-        axios({
-          method: 'POST',
-          url: 'http://localhost:5000/api/friends',
-          headers: {
-            Authorization: localStorage.getItem('token'),
-          },
-          data: values,
-        })
-          .then((response) => {
-            setFriends(response.data);
-            onClose();
-          })
-          .catch((error) => error)
-          .finally(() => {
-            setSubmitting(false);
-          });
-      }
+    const { id, ...rest } = friend;
+    if (editing) {
+      dispatch(putFriend(friend));
+    } else {
+      dispatch(postFriend(rest));
     }
-  }, [
-    action,
-    id,
-    onClose,
-    setFriends,
-    submitting,
-    values,
-    values.age,
-    values.email,
-    values.name,
-  ]);
+
+    onClose();
+  };
 
   return (
     <form onSubmit={handleSubmit}>
@@ -109,7 +64,7 @@ const FriendsForm: FC<FriendsFormProps> = ({
             id="name"
             type="text"
             name="name"
-            value={values.name}
+            value={friend.name}
             onChange={handleChange}
             autoComplete="on"
           />
@@ -121,7 +76,7 @@ const FriendsForm: FC<FriendsFormProps> = ({
             id="age"
             type="number"
             name="age"
-            value={values.age}
+            value={friend.age}
             onChange={handleChange}
             autoComplete="on"
           />
@@ -133,7 +88,7 @@ const FriendsForm: FC<FriendsFormProps> = ({
             id="email"
             type="email"
             name="email"
-            value={values.email}
+            value={friend.email}
             onChange={handleChange}
             autoComplete="on"
           />
@@ -142,7 +97,7 @@ const FriendsForm: FC<FriendsFormProps> = ({
 
       <DrawerFooter>
         <Button
-          isLoading={submitting}
+          isLoading={posting || putting}
           loadingText="Submitting"
           type="submit"
           variantColor="blue"

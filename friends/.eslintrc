@@ -49,7 +49,8 @@
     "optimize-regex/optimize-regex": "warn",
     "react/jsx-filename-extension": "off",
     "react/prop-types": "off",
-    "spaced-comment": ["error", "always", { "markers": ["/"] }]
+    "spaced-comment": ["error", "always", { "markers": ["/"] }],
+    "import/no-cycle": "warn"
   },
   "env": {
     "browser": true,

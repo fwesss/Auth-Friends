@@ -1,6 +1,6 @@
 import { Action, createSlice } from '@reduxjs/toolkit';
 import { ThunkAction } from 'redux-thunk';
-import requestAuthentication from '../../api/friendsAPI';
+import { requestAuthentication } from '../../api/friendsAPI';
 // eslint-disable-next-line import/no-cycle
 import { RootState } from '../../app/rootReducer';
 

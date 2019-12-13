@@ -1,5 +1,4 @@
-import React, { FC, useEffect, useReducer, useState } from 'react';
-import axios from 'axios';
+import React, { FC, useEffect } from 'react';
 import {
   useDisclosure,
   Spinner,
@@ -9,89 +8,42 @@ import {
   ButtonGroup,
   Grid,
 } from '@chakra-ui/core';
+import { useDispatch, useSelector } from 'react-redux';
 import FriendsDrawer from './FriendsDrawer';
 import ensure from '../../utils/ensure';
+import { fetchFriends } from './getFriends/getFriendsSlice';
+import { RootState } from '../../app/rootReducer';
+import { setFriendForEditing } from './editFriend/editFriendSlice';
+import { removeFriend } from './deleteFriend/deleteFriendSlice';
 
 const FriendsList: FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [isLoading, setIsLoading] = useState(true);
-
-  const [deleteItem, setDeleteItem] = useReducer(
-    (state, newState) => ({ ...state, ...newState }),
-    { itemToDelete: 0, deleting: false }
+  const dispatch = useDispatch();
+  const { fetching, friends } = useSelector(
+    (state: RootState) => state.getFriends
   );
-
-  const [friendToEdit, setFriendToEdit] = useState({
-    id: 0,
-    name: '',
-    age: '',
-    email: '',
-  });
-
-  const [action, setAction] = useState('');
-  const [friends, setFriends] = useState([
-    {
-      id: 0,
-      name: '',
-      age: '',
-      email: '',
-    },
-  ]);
+  const { deleting } = useSelector((state: RootState) => state.deleteFriend);
 
   useEffect(() => {
-    axios({
-      method: 'GET',
-      url: 'http://localhost:5000/api/friends',
-      headers: {
-        Authorization: localStorage.getItem('token'),
-      },
-    })
-      .then((response) => {
-        setFriends(response.data);
-      })
-      .catch((error) => {
-        return error;
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, []);
-
-  const deleteFriend = (id: number): void => {
-    setDeleteItem({
-      itemToDelete: id,
-      deleting: true,
-    });
-  };
+    dispatch(fetchFriends());
+  }, [dispatch]);
 
   const editFriend = (id: number): void => {
-    setAction('EDIT');
-    setFriendToEdit(ensure(friends.find((friend) => friend.id === id)));
+    dispatch(
+      setFriendForEditing(ensure(friends.find((friend) => friend.id === id)))
+    );
     onOpen();
   };
 
-  useEffect(() => {
-    if (deleteItem.deleting) {
-      axios({
-        method: 'DELETE',
-        url: `http://localhost:5000/api/friends/${deleteItem.itemToDelete}`,
-        headers: {
-          Authorization: localStorage.getItem('token'),
-        },
-      })
-        .then((response) => setFriends(response.data))
-        .catch((error) => error)
-        .finally(() => {
-          setDeleteItem({
-            deleting: false,
-          });
-        });
-    }
-  }, [deleteItem.deleting, deleteItem.itemToDelete]);
+  const deleteFriend = (id: number): void => {
+    dispatch(
+      removeFriend(ensure(friends.find((friend) => friend.id === id)).id)
+    );
+  };
 
   return (
     <Grid templateColumns="repeat(4, 1fr)" gap={6} m={10}>
-      {isLoading ? (
+      {fetching ? (
         <Spinner size="xl" />
       ) : (
         friends.map((friend) => (
@@ -108,7 +60,7 @@ const FriendsList: FC = () => {
               </Button>
 
               <Button
-                isLoading={deleteItem.deleting}
+                isLoading={deleting}
                 loadingText="Deleting"
                 variantColor="red"
                 aria-label={`delete-${friend.email}`}
@@ -121,16 +73,7 @@ const FriendsList: FC = () => {
         ))
       )}
 
-      <FriendsDrawer
-        setFriends={setFriends}
-        action={action}
-        setAction={setAction}
-        friend={friendToEdit}
-        setFriend={setFriendToEdit}
-        onOpen={onOpen}
-        isOpen={isOpen}
-        onClose={onClose}
-      />
+      <FriendsDrawer onOpen={onOpen} isOpen={isOpen} onClose={onClose} />
     </Grid>
   );
 };
